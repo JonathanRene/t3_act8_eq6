@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Inter:wght@400;600&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: #E8D8C8;
+    font-family: 'Inter', sans-serif;
+}
+
+.login-pantalla {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-formulario {
+    background-color: #DBCAB8;
+    padding: 3rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo {
+    font-family: 'Lora', serif;
+    color: #6A4A3C;
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+}
+
+.login-logo span { color: #DFB15B; }
+
+.error-message {
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.input-group { margin-bottom: 1.5rem; }
+
+.login-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #6A4A3C;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.login-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #c2b09e;
+    border-radius: 6px;
+    background-color: #F4EBE1;
+    font-size: 1rem;
+}
+
+.login-input:focus {
+    outline: none;
+    border-color: #DFB15B;
+}
+
+.login-boton {
+    background-color: #DFB15B;
+    color: #6A4A3C;
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
