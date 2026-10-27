@@ -27,7 +27,15 @@
             <!-- Navbar -->
             <header class="navbar">
                 <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Buscar eventos, municipios...">
+                    <input type="text" id="searchInput" placeholder="Buscar eventos...">
+                    <!-- NUEVO: Filtro por categoría -->
+                    <select id="categoryFilter" style="padding: 0.6rem; border-radius: 20px; border: 1px solid #ccc; margin-left: 5px; outline: none;">
+                        <option value="">Todas las categorías</option>
+                        <option value="beauty">Belleza</option>
+                        <option value="fragrances">Fragancias</option>
+                        <option value="furniture">Muebles</option>
+                        <option value="groceries">Despensa</option>
+                    </select>
                     <button id="searchBtn">Buscar</button>
                 </div>
                 <div class="user-profile">
@@ -48,8 +56,7 @@
                         <button class="explore-btn">Explorar eventos</button>
                     </div>
                     <div class="hero-image">
-                        <img src="./assets/img/oaxaca-templo.jpeg" alt="Oaxaca">
-                        <div style="background: #ccc; height: 100%; width: 100%; border-radius: 8px;"></div>
+                        <img src="./assets/img/oaxaca-templo.png" alt="Oaxaca" class="banner-img">
                     </div>
                 </div>
 
@@ -79,9 +86,11 @@
                     <button id="prevBtn">Anterior</button>
                     <span id="pageInfo">Página 1</span>
                     <button id="nextBtn">Siguiente</button>
+                    <!-- NUEVO: Opción de 40 agregada -->
                     <select id="limitSelect">
                         <option value="10">10 por pág.</option>
                         <option value="20">20 por pág.</option>
+                        <option value="40">40 por pág.</option>
                         <option value="50">50 por pág.</option>
                     </select>
                 </div>
@@ -89,7 +98,7 @@
         </div>
     </div>
 
-    <!-- Modal para CRUD -->
+    <!-- MODAL 1: Formulario CRUD -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <h2 id="modalTitle">Publicar Evento</h2>
@@ -97,15 +106,32 @@
                 <input type="hidden" id="eventId">
                 <label>Nombre del Evento</label>
                 <input type="text" id="eventTitle" required>
-                
-                <label>Descripción / Categoría</label>
+                <label>Categoría (beauty, fragrances, etc.)</label>
                 <input type="text" id="eventCategory" required>
-                
                 <div class="modal-actions">
                     <button type="button" id="closeModalBtn" class="cancel-btn">Cancelar</button>
                     <button type="submit" class="save-btn">Guardar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Confirmación Visual (Reemplaza window.confirm) -->
+    <div id="confirmModal" class="modal" style="z-index: 1000;">
+        <div class="modal-content" style="width: 350px; text-align: center;">
+            <h3 id="confirmMessage" style="margin-bottom: 1.5rem; color: #6A4A3C;">¿Estás seguro?</h3>
+            <div class="modal-actions" style="justify-content: center;">
+                <button type="button" id="cancelConfirmBtn" class="cancel-btn">Cancelar</button>
+                <button type="button" id="acceptConfirmBtn" class="save-btn" style="background: #ffcccc; color: #cc0000;">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Alerta Visual (Reemplaza alert()) -->
+    <div id="alertModal" class="modal" style="z-index: 2000;">
+        <div class="modal-content" style="width: 300px; text-align: center;">
+            <h3 id="alertMessage" style="margin-bottom: 1.5rem; color: #6A4A3C;">Mensaje</h3>
+            <button type="button" id="closeAlertBtn" class="save-btn">Aceptar</button>
         </div>
     </div>
 

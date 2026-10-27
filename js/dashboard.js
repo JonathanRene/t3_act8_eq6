@@ -1,6 +1,6 @@
 import { getEvents, addEvent, updateEvent, deleteEvent } from './api.js';
 
-// 1. Protección de ruta y pintado de usuario
+// 1. Protección de ruta
 const session = localStorage.getItem('authUser');
 if (!session) {
     window.location.href = 'index.html';
@@ -15,17 +15,43 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
     window.location.href = 'index.html';
 });
 
-// 2. Variables de Estado para la Tabla
+// 2. Variables de Estado
 let currentPage = 1;
 let currentLimit = 10;
 let totalItems = 0;
 let searchQuery = '';
+let categoryQuery = '';
 let eventsData = [];
 
 const tableBody = document.getElementById('tableBody');
 const pageInfo = document.getElementById('pageInfo');
 
-// 3. Función para cargar datos
+// --- SISTEMA DE MODALES PERSONALIZADOS (Reemplazo de alert y confirm) ---
+function showAlert(msg) {
+    document.getElementById('alertMessage').textContent = msg;
+    document.getElementById('alertModal').style.display = 'flex';
+}
+document.getElementById('closeAlertBtn').addEventListener('click', () => {
+    document.getElementById('alertModal').style.display = 'none';
+});
+
+let currentConfirmCallback = null;
+function showConfirm(msg, callback) {
+    document.getElementById('confirmMessage').textContent = msg;
+    currentConfirmCallback = callback;
+    document.getElementById('confirmModal').style.display = 'flex';
+}
+document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
+    document.getElementById('confirmModal').style.display = 'none';
+    currentConfirmCallback = null;
+});
+document.getElementById('acceptConfirmBtn').addEventListener('click', () => {
+    document.getElementById('confirmModal').style.display = 'none';
+    if (currentConfirmCallback) currentConfirmCallback();
+});
+// -------------------------------------------------------------------------
+
+// 3. Cargar datos
 async function loadData() {
     tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Cargando...</td></tr>';
     try {
@@ -35,21 +61,27 @@ async function loadData() {
         totalItems = data.total;
         renderTable();
         updatePagination();
-        updateURL(); // Reflejar en la URL de la barra de navegación
+        updateURL();
     } catch (error) {
         tableBody.innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">${error.message}</td></tr>`;
     }
 }
 
-// 4. Renderizar Tabla
+// 4. Renderizar Tabla (con filtro de categoría local)
 function renderTable() {
     tableBody.innerHTML = '';
-    if (eventsData.length === 0) {
+    
+    // Filtrar localmente por categoría si hay una seleccionada
+    const filteredData = categoryQuery 
+        ? eventsData.filter(item => item.category === categoryQuery)
+        : eventsData;
+
+    if (filteredData.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay resultados</td></tr>';
         return;
     }
     
-    eventsData.forEach(item => {
+    filteredData.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.id}</td>
@@ -63,7 +95,6 @@ function renderTable() {
         tableBody.appendChild(row);
     });
 
-    // Eventos de botones Editar y Borrar
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', (e) => openModal(e.target.dataset.id));
     });
@@ -79,32 +110,23 @@ function updatePagination() {
     document.getElementById('nextBtn').disabled = (currentPage * currentLimit) >= totalItems;
 }
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-    if (currentPage > 1) { currentPage--; loadData(); }
-});
-
-document.getElementById('nextBtn').addEventListener('click', () => {
-    if ((currentPage * currentLimit) < totalItems) { currentPage++; loadData(); }
-});
-
-document.getElementById('limitSelect').addEventListener('change', (e) => {
-    currentLimit = parseInt(e.target.value);
-    currentPage = 1;
-    loadData();
-});
+document.getElementById('prevBtn').addEventListener('click', () => { if (currentPage > 1) { currentPage--; loadData(); } });
+document.getElementById('nextBtn').addEventListener('click', () => { if ((currentPage * currentLimit) < totalItems) { currentPage++; loadData(); } });
+document.getElementById('limitSelect').addEventListener('change', (e) => { currentLimit = parseInt(e.target.value); currentPage = 1; loadData(); });
 
 document.getElementById('searchBtn').addEventListener('click', () => {
-    searchQuery = document.getElementById('searchInput').value;
+    searchQuery = document.getElementById('searchInput').value.trim();
+    categoryQuery = document.getElementById('categoryFilter').value;
     currentPage = 1;
     loadData();
 });
 
 function updateURL() {
-    const newUrl = `${window.location.pathname}?page=${currentPage}&limit=${currentLimit}&search=${searchQuery}`;
+    const newUrl = `${window.location.pathname}?page=${currentPage}&limit=${currentLimit}&search=${searchQuery}&category=${categoryQuery}`;
     window.history.pushState({}, '', newUrl);
 }
 
-// Leer parámetros de la URL al cargar
+// Leer parámetros de URL al cargar
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has('page')) currentPage = parseInt(params.get('page'));
@@ -116,10 +138,14 @@ window.addEventListener('DOMContentLoaded', () => {
         searchQuery = params.get('search');
         document.getElementById('searchInput').value = searchQuery;
     }
+    if (params.has('category')) {
+        categoryQuery = params.get('category');
+        document.getElementById('categoryFilter').value = categoryQuery;
+    }
     loadData();
 });
 
-// 6. Modal y CRUD
+// 6. Modal de CRUD
 const modal = document.getElementById('eventModal');
 const eventForm = document.getElementById('eventForm');
 const eventTitle = document.getElementById('eventTitle');
@@ -150,31 +176,31 @@ eventForm.addEventListener('submit', async (e) => {
     
     try {
         if (eventId.value) {
-            // Actualizar
             const updated = await updateEvent(eventId.value, data);
             eventsData = eventsData.map(ev => ev.id == eventId.value ? updated : ev);
-            alert('Editado exitosamente (Simulación)');
+            showAlert('Editado exitosamente (Simulación)'); // Reemplaza alert
         } else {
-            // Crear
             const newEvent = await addEvent(data);
             eventsData.unshift(newEvent);
-            alert('Agregado exitosamente (Simulación)');
+            showAlert('Agregado exitosamente (Simulación)'); // Reemplaza alert
         }
         modal.style.display = 'none';
         renderTable();
     } catch (error) {
-        alert('Error al guardar el evento');
+        showAlert('Error al guardar el evento');
     }
 });
 
-async function handleDelete(id) {
-    if (!confirm('¿Estás seguro de eliminar este evento?')) return;
-    try {
-        await deleteEvent(id);
-        eventsData = eventsData.filter(ev => ev.id != id);
-        renderTable();
-        alert('Evento eliminado (Simulación)');
-    } catch (error) {
-        alert('Error al eliminar');
-    }
+// USO DEL NUEVO COMPONENTE VISUAL PARA ELIMINAR (Reemplaza window.confirm)
+function handleDelete(id) {
+    showConfirm('¿Estás seguro de eliminar este evento?', async () => {
+        try {
+            await deleteEvent(id);
+            eventsData = eventsData.filter(ev => ev.id != id);
+            renderTable();
+            showAlert('Evento eliminado (Simulación)');
+        } catch (error) {
+            showAlert('Error al eliminar');
+        }
+    });
 }
