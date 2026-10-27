@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OaxacaVive - Sistema</title>
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="sidebar-logo"><span>Oaxaca</span><span class="highlight">Vive</span></h2>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Eventos</a></li>
+                    <li><a href="#">Mapa</a></li>
+                    <li><a href="#">Favoritos</a></li>
+                </ul>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">Cerrar sesión</button>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Navbar -->
+            <header class="navbar">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Buscar eventos, municipios...">
+                    <button id="searchBtn">Buscar</button>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <strong id="userNameDisplay">Cargando...</strong>
+                        <span>Administrador</span>
+                    </div>
+                    <img id="userImageDisplay" src="" alt="Perfil" class="user-avatar">
+                </div>
+            </header>
+
+            <main class="dashboard-body">
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="hero-text">
+                        <h1>Descubre<br><span>la cultura de Oaxaca</span></h1>
+                        <p>Encuentra calendas, conciertos, eventos culturales y mucho más...</p>
+                        <button class="explore-btn">Explorar eventos</button>
+                    </div>
+                    <div class="hero-image">
+                        <!-- Pon tu imagen de Figma en assets/img/ y descomenta la siguiente línea -->
+                        <!-- <img src="./assets/img/oaxaca-templo.png" alt="Oaxaca"> -->
+                        <div style="background: #ccc; height: 100%; width: 100%; border-radius: 8px;"></div>
+                    </div>
+                </div>
+
+                <!-- Controles de tabla -->
+                <div class="table-controls">
+                    <h3>Listado de Eventos</h3>
+                    <button id="addEventBtn" class="add-btn">+ Publicar evento</button>
+                </div>
+
+                <!-- Tabla de datos -->
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título del Evento</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="4" style="text-align:center;">Cargando datos...</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- Paginación -->
+                <div class="pagination">
+                    <button id="prevBtn">Anterior</button>
+                    <span id="pageInfo">Página 1</span>
+                    <button id="nextBtn">Siguiente</button>
+                    <select id="limitSelect">
+                        <option value="10">10 por pág.</option>
+                        <option value="20">20 por pág.</option>
+                        <option value="50">50 por pág.</option>
+                    </select>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para CRUD -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Publicar Evento</h2>
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+                <label>Nombre del Evento</label>
+                <input type="text" id="eventTitle" required>
+                
+                <label>Descripción / Categoría</label>
+                <input type="text" id="eventCategory" required>
+                
+                <div class="modal-actions">
+                    <button type="button" id="closeModalBtn" class="cancel-btn">Cancelar</button>
+                    <button type="submit" class="save-btn">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="./js/dashboard.js"></script>
+</body>
+</html>
