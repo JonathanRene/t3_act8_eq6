@@ -26,7 +26,7 @@ let eventsData = [];
 const tableBody = document.getElementById('tableBody');
 const pageInfo = document.getElementById('pageInfo');
 
-// --- SISTEMA DE MODALES PERSONALIZADOS (Reemplazo de alert y confirm) ---
+// --- SISTEMA DE MODALES PERSONALIZADOS ---
 function showAlert(msg) {
     document.getElementById('alertMessage').textContent = msg;
     document.getElementById('alertModal').style.display = 'flex';
@@ -49,7 +49,7 @@ document.getElementById('acceptConfirmBtn').addEventListener('click', () => {
     document.getElementById('confirmModal').style.display = 'none';
     if (currentConfirmCallback) currentConfirmCallback();
 });
-// -------------------------------------------------------------------------
+// -----------------------------------------
 
 // 3. Cargar datos
 async function loadData() {
@@ -71,7 +71,6 @@ async function loadData() {
 function renderTable() {
     tableBody.innerHTML = '';
     
-    // Filtrar localmente por categoría si hay una seleccionada
     const filteredData = categoryQuery 
         ? eventsData.filter(item => item.category === categoryQuery)
         : eventsData;
@@ -145,7 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
     loadData();
 });
 
-// 6. Modal de CRUD
+// 6. Modal de CRUD con emojis
 const modal = document.getElementById('eventModal');
 const eventForm = document.getElementById('eventForm');
 const eventTitle = document.getElementById('eventTitle');
@@ -178,29 +177,28 @@ eventForm.addEventListener('submit', async (e) => {
         if (eventId.value) {
             const updated = await updateEvent(eventId.value, data);
             eventsData = eventsData.map(ev => ev.id == eventId.value ? updated : ev);
-            showAlert('Editado exitosamente (Simulación)'); // Reemplaza alert
+            showAlert('Evento editado exitosamente ✅'); 
         } else {
             const newEvent = await addEvent(data);
             eventsData.unshift(newEvent);
-            showAlert('Agregado exitosamente (Simulación)'); // Reemplaza alert
+            showAlert('Evento publicado exitosamente ✅'); 
         }
         modal.style.display = 'none';
         renderTable();
     } catch (error) {
-        showAlert('Error al guardar el evento');
+        showAlert('Error al guardar el evento ❌');
     }
 });
 
-// USO DEL NUEVO COMPONENTE VISUAL PARA ELIMINAR (Reemplaza window.confirm)
 function handleDelete(id) {
     showConfirm('¿Estás seguro de eliminar este evento?', async () => {
         try {
             await deleteEvent(id);
             eventsData = eventsData.filter(ev => ev.id != id);
             renderTable();
-            showAlert('Evento eliminado (Simulación)');
+            showAlert('Evento eliminado 🗑️');
         } catch (error) {
-            showAlert('Error al eliminar');
+            showAlert('Error al eliminar ❌');
         }
     });
 }
