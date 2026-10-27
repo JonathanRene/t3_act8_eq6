@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OaxacaVive - Iniciar Sesión</title>
+    <title>OaxacaVive - Login</title>
+    <!-- Ruta relativa para que cargue perfectamente en el VPS y GitHub Pages -->
     <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
-    <div class="login-pantalla">
-        <form id="loginForm" class="login-formulario">
-            <h1 class="login-logo">Oaxaca<span>Vive</span></h1>
-            
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
-
-            <div class="input-group">
-                <label class="login-label">Correo electrónico (Usuario Dummy: emilys)</label>
-                <input id="username" class="login-input" type="text" placeholder="ejemplo@gmail.com" required>
+    <div class="login-container">
+        <h2>OaxacaVive</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Correo electrónico (Usuario Dummy: emilys)</label>
+                <input type="text" id="email" required placeholder="ejemplo@gmail.com">
             </div>
-
-            <div class="input-group">
-                <label class="login-label">Contraseña (Pass: emilyspass)</label>
-                <input id="password" class="login-input" type="password" placeholder="***********" required>
+            <div class="form-group">
+                <label for="password">Contraseña (Pass: emilyspass)</label>
+                <input type="password" id="password" required placeholder="**********">
             </div>
-
-            <button type="submit" class="login-boton" id="submitBtn">Ingresar</button>
+            <button type="submit" class="btn-submit">Ingresar</button>
+            <p id="errorMsg" class="error-msg" style="color: red; display: none;"></p>
         </form>
     </div>
     <script type="module" src="./js/login.js"></script>
