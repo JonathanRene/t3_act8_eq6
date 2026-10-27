@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OaxacaVive - Login</title>
-    <!-- Aquí enlazarías tu archivo CSS -->
-    <link rel="stylesheet" href="style.css"> 
+    <title>OaxacaVive - Iniciar Sesión</title>
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
     <div class="login-pantalla">
         <form id="loginForm" class="login-formulario">
-            <div class="login-logo">OaxacaVive</div>
+            <h1 class="login-logo">Oaxaca<span>Vive</span></h1>
             
-            <div id="errorMessage" style="color: red; margin-bottom: 1rem; display: none;"></div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
 
-            <div>
-                <label class="login-label">Correo electrónico</label>
+            <div class="input-group">
+                <label class="login-label">Correo electrónico (Usuario Dummy: emilys)</label>
                 <input id="username" class="login-input" type="text" placeholder="ejemplo@gmail.com" required>
             </div>
 
-            <div>
-                <label class="login-label">Contraseña</label>
+            <div class="input-group">
+                <label class="login-label">Contraseña (Pass: emilyspass)</label>
                 <input id="password" class="login-input" type="password" placeholder="***********" required>
             </div>
 
             <button type="submit" class="login-boton" id="submitBtn">Ingresar</button>
         </form>
     </div>
-
-    <!-- Enlazamos la lógica de JavaScript -->
-    <script src="app.js"></script>
+    <script type="module" src="./js/login.js"></script>
 </body>
 </html>
