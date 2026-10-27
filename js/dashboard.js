@@ -3,53 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OaxacaVive - Panel de Eventos</title>
-    <!-- Ruta relativa limpia -->
+    <title>OaxacaVive - Sistema</title>
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body>
-    <div class="dashboard-layout">
+    <div class="layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h2>OaxacaVive</h2>
-            <nav>
+            <h2 class="sidebar-logo"><span>Oaxaca</span><span class="highlight">Vive</span></h2>
+            <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Inicio</a></li>
                     <li><a href="#">Eventos</a></li>
                     <li><a href="#">Mapa</a></li>
                     <li><a href="#">Favoritos</a></li>
                 </ul>
             </nav>
-            <div class="user-profile">
-                <img id="userImageDisplay" src="" alt="Avatar" style="width: 40px; border-radius: 50%;">
-                <span id="userNameDisplay">Cargando...</span>
-                <button id="logoutBtn" class="btn-logout">Salir</button>
-            </div>
+            <button id="logoutBtn" class="logout-btn">Cerrar sesión</button>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <header class="top-bar">
-                <h1>Listado de Eventos</h1>
-                <button id="addEventBtn" class="btn-primary">+ Publicar evento</button>
+        <div class="main-content">
+            <!-- Navbar -->
+            <header class="navbar">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Buscar eventos...">
+                    <!-- NUEVO: Filtro por categoría -->
+                    <select id="categoryFilter" style="padding: 0.6rem; border-radius: 20px; border: 1px solid #ccc; margin-left: 5px; outline: none;">
+                        <option value="">Todas las categorías</option>
+                        <option value="beauty">Belleza</option>
+                        <option value="fragrances">Fragancias</option>
+                        <option value="furniture">Muebles</option>
+                        <option value="groceries">Despensa</option>
+                    </select>
+                    <button id="searchBtn">Buscar</button>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <strong id="userNameDisplay">Cargando...</strong>
+                        <span>Administrador</span>
+                    </div>
+                    <img id="userImageDisplay" src="" alt="Perfil" class="user-avatar">
+                </div>
             </header>
 
-            <!-- Filtros y Búsqueda -->
-            <section class="filters-section">
-                <input type="text" id="searchInput" placeholder="Buscar por título...">
-                <select id="categoryFilter">
-                    <option value="">Todas las categorías</option>
-                    <option value="beauty">Beauty</option>
-                    <option value="fragrances">Fragrances</option>
-                    <option value="furniture">Furniture</option>
-                    <option value="groceries">Groceries</option>
-                </select>
-                <button id="searchBtn" class="btn-secondary">Filtrar</button>
-            </section>
+            <main class="dashboard-body">
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="hero-text">
+                        <h1>Descubre<br><span>la cultura de Oaxaca</span></h1>
+                        <p>Encuentra calendas, conciertos, eventos culturales y mucho más...</p>
+                        <button class="explore-btn">Explorar eventos</button>
+                    </div>
+                    <div class="hero-image">
+                        <img src="./assets/img/oaxaca-templo.png" alt="Oaxaca" class="banner-img">
+                    </div>
+                </div>
 
-            <!-- Tabla de Datos -->
-            <section class="table-container">
-                <table>
+                <!-- Controles de tabla -->
+                <div class="table-controls">
+                    <h3>Listado de Eventos</h3>
+                    <button id="addEventBtn" class="add-btn">+ Publicar evento</button>
+                </div>
+
+                <!-- Tabla de datos -->
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -59,59 +77,61 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Dinámico -->
+                        <tr><td colspan="4" style="text-align:center;">Cargando datos...</td></tr>
                     </tbody>
                 </table>
-            </section>
 
-            <!-- Paginación -->
-            <footer class="pagination-footer">
-                <button id="prevBtn" class="btn-page">Anterior</button>
-                <span id="pageInfo">Página 1</span>
-                <button id="nextBtn" class="btn-page">Siguiente</button>
-                <select id="limitSelect">
-                    <option value="5">5 por página</option>
-                    <option value="10" selected>10 por página</option>
-                    <option value="20">20 por página</option>
-                </select>
-            </footer>
-        </main>
+                <!-- Paginación -->
+                <div class="pagination">
+                    <button id="prevBtn">Anterior</button>
+                    <span id="pageInfo">Página 1</span>
+                    <button id="nextBtn">Siguiente</button>
+                    <!-- NUEVO: Opción de 40 agregada -->
+                    <select id="limitSelect">
+                        <option value="10">10 por pág.</option>
+                        <option value="20">20 por pág.</option>
+                        <option value="40">40 por pág.</option>
+                        <option value="50">50 por pág.</option>
+                    </select>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <!-- Modal CRUD -->
-    <div id="eventModal" class="modal" style="display: none;">
+    <!-- MODAL 1: Formulario CRUD -->
+    <div id="eventModal" class="modal">
         <div class="modal-content">
-            <h3 id="modalTitle">Publicar Evento</h3>
+            <h2 id="modalTitle">Publicar Evento</h2>
             <form id="eventForm">
                 <input type="hidden" id="eventId">
-                <label>Título:</label>
+                <label>Nombre del Evento</label>
                 <input type="text" id="eventTitle" required>
-                <label>Categoría:</label>
-                <input type="text" id="eventCategory" required placeholder="Ej. beauty">
-                <div class="modal-buttons">
-                    <button type="submit" class="btn-save">Guardar</button>
-                    <button type="button" id="closeModalBtn" class="btn-cancel">Cancelar</button>
+                <label>Categoría (beauty, fragrances, etc.)</label>
+                <input type="text" id="eventCategory" required>
+                <div class="modal-actions">
+                    <button type="button" id="closeModalBtn" class="cancel-btn">Cancelar</button>
+                    <button type="submit" class="save-btn">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Alerta -->
-    <div id="alertModal" class="modal" style="display: none;">
-        <div class="modal-content text-center">
-            <p id="alertMessage">Mensaje</p>
-            <button id="closeAlertBtn" class="btn-primary">Aceptar</button>
+    <!-- MODAL 2: Confirmación Visual (Reemplaza window.confirm) -->
+    <div id="confirmModal" class="modal" style="z-index: 1000;">
+        <div class="modal-content" style="width: 350px; text-align: center;">
+            <h3 id="confirmMessage" style="margin-bottom: 1.5rem; color: #6A4A3C;">¿Estás seguro?</h3>
+            <div class="modal-actions" style="justify-content: center;">
+                <button type="button" id="cancelConfirmBtn" class="cancel-btn">Cancelar</button>
+                <button type="button" id="acceptConfirmBtn" class="save-btn" style="background: #ffcccc; color: #cc0000;">Eliminar</button>
+            </div>
         </div>
     </div>
 
-    <!-- Modal Confirmación -->
-    <div id="confirmModal" class="modal" style="display: none;">
-        <div class="modal-content text-center">
-            <p id="confirmMessage">¿Estás seguro?</p>
-            <div class="modal-buttons">
-                <button id="acceptConfirmBtn" class="btn-save">Sí</button>
-                <button id="cancelConfirmBtn" class="btn-cancel">No</button>
-            </div>
+    <!-- MODAL 3: Alerta Visual (Reemplaza alert()) -->
+    <div id="alertModal" class="modal" style="z-index: 2000;">
+        <div class="modal-content" style="width: 300px; text-align: center;">
+            <h3 id="alertMessage" style="margin-bottom: 1.5rem; color: #6A4A3C;">Mensaje</h3>
+            <button type="button" id="closeAlertBtn" class="save-btn">Aceptar</button>
         </div>
     </div>
 
